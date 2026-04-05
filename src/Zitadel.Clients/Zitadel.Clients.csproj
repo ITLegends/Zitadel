@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageTags>Zitadel;gRPC;API</PackageTags>
+        <Description>
+            This package functions as a client library for easy to use API access to ZITADEL. This allows consumers to 
+            easily manage ZITADEL resources via the provided gRPC clients.
+        </Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.34.1" />
+        <PackageReference Include="Grpc.Net.ClientFactory" Version="2.76.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Zitadel.AccessTokenManagement\Zitadel.AccessTokenManagement.csproj" />
+    </ItemGroup>
+
+</Project>

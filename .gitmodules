@@ -1,3 +1,0 @@
-[submodule "external/protoc-gen-validate"]
-	path = external/protoc-gen-validate
-	url = https://github.com/envoyproxy/protoc-gen-validate.git

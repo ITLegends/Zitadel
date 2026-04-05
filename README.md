@@ -1,56 +1,91 @@
 # ZITADEL .NET
 
-[![.NET Release](https://github.com/smartive/zitadel-net/actions/workflows/dotnet-release.yml/badge.svg)](https://github.com/smartive/zitadel-net/actions/workflows/dotnet-release.yml)
-[![Nuget](https://img.shields.io/nuget/v/Zitadel)](https://www.nuget.org/packages/Zitadel/)
+[![.NET Release](https://github.com/ITLegends/Zitadel/actions/workflows/release-zitadel.yml/badge.svg)](https://github.com/ITLegends/Zitadel/actions/workflows/release-zitadel.yml)
 
-Welcome to the repository of the ZITADEL dotnet libraries.
+.NET libraries for integrating with [ZITADEL](https://zitadel.com) — the open-source identity platform. Covers everything from protecting ASP.NET apps and APIs to calling ZITADEL's gRPC management APIs from backend services.
 
-This repository contains authentication and resource management for ZITADEL in .NET.
-It can be used to create a ASP.NET application (with internal session management)
-or WebAPIs with OIDC introspection. Further, the compiled proto resources of the
-ZITADEL source repository are included to access the API of ZITADEL and manage resources.
+---
 
-as well as the [examples](./examples) folder which contains several examples
-for accessing the [API of ZITADEL](./examples/Zitadel.ApiAccess)
-or using it in a [WebApp](./examples/Zitadel.AspNet.AuthN) or
-[WebAPI](./examples/Zitadel.WebApi).
+## Packages
 
-### Development
+### [IT.Legends.Zitadel.AspNetCore](./src/Zitadel.AspNetCore/README.md)
+[![NuGet](https://img.shields.io/nuget/v/IT.Legends.Zitadel.AspNetCore.svg)](https://www.nuget.org/packages/IT.Legends.Zitadel.AspNetCore)
 
-To help developing the libraries, you may just open an issue or create a pull request
-to this repository.
+Authentication middleware for ASP.NET Core. Use this to protect web apps (OpenID Connect) or APIs (OAuth2 token introspection).
+Includes a fake authentication handler for local development and testing.
 
-#### Prerequisites
+```shell
+dotnet add package IT.Legends.Zitadel.AspNetCore
+```
 
-To set up the dev environment, you need to install:
+### [IT.Legends.Zitadel.AccessTokenManagement](./src/Zitadel.AccessTokenManagement/README.md)
+[![NuGet](https://img.shields.io/nuget/v/IT.Legends.Zitadel.AccessTokenManagement.svg)](https://www.nuget.org/packages/IT.Legends.Zitadel.AccessTokenManagement)
 
-1. [.NET SDK](https://dotnet.microsoft.com/download) (8.x or later)
-2. [Buf CLI](https://buf.build/docs/installation) - for protobuf code generation
-3. [Just](https://github.com/casey/just) - task runner (installed via dotnet tools)
+Automatic service account token management. Tokens are acquired, cached, and refreshed automatically. Supports PAT, client credentials, and JWT Profile auth (including external signing via Azure Key Vault or similar). Can be used to call APIs protected by ZITADEL or the ZITADEL API itself..
 
-#### Building the Project
+```shell
+dotnet add package IT.Legends.Zitadel.AccessTokenManagement
+```
 
-Follow these steps to build the project:
+### [IT.Legends.Zitadel.Abstractions](./src/Zitadel.Abstractions/README.md)
+[![NuGet](https://img.shields.io/nuget/v/IT.Legends.Zitadel.Abstractions.svg)](https://www.nuget.org/packages/IT.Legends.Zitadel.Abstractions)
 
-1. **Install .NET tools (including Just):**
-   ```bash
-   dotnet tool restore
-   ```
+Shared types and primitives — claim constants, scope definitions, credential models, and auth scheme defaults. Zero external dependencies. You generally don't need to reference this directly.
 
-2. **Generate gRPC code (required before first build):**
-   ```bash
-   just generate-grpc
-   ```
+```shell
+dotnet add package IT.Legends.Zitadel.Abstractions
+```
 
-3. **Build the project:**
-   ```bash
-   dotnet build
-   ```
+### [IT.Legends.Zitadel.Clients](./src/Zitadel.Clients/README.md)
+[![NuGet](https://img.shields.io/nuget/v/IT.Legends.Zitadel.Clients.svg)](https://www.nuget.org/packages/IT.Legends.Zitadel.Clients)
 
-4. **Run tests:**
-   ```bash
-   dotnet test --configuration Release
-   ```
+gRPC clients automatically generated from the ZITADEL proto files — one client per ZITADEL service. Use alongside `Zitadel.AccessTokenManagement` to call ZITADEL APIs from a backend service.
+
+
+```shell
+dotnet add package IT.Legends.Zitadel.Clients
+```
+
+---
+
+## Examples
+
+The [`examples`](./examples) folder contains working samples:
+
+| Example | What it shows |
+|---|---|
+| [IT.Legends.Zitadel.AspNet.AuthN](./examples/Zitadel.AspNet.AuthN) | Web app with OIDC sign-in via `AddZitadel()` |
+| [IT.Legends.Zitadel.WebApi](./examples/Zitadel.WebApi) | API protected with OAuth2 token introspection |
+| [IT.Legends.Zitadel.ApiAccess](./examples/Zitadel.ApiAccess) | Backend service calling the ZITADEL gRPC API with a service account |
+
+---
+
+## Development
+
+### Prerequisites
+
+1. [.NET SDK](https://dotnet.microsoft.com/download) (10.x or later)
+2. [Buf CLI](https://buf.build/docs/installation) — for protobuf code generation
+
+### Getting started
+
+```bash
+# install buf first https://buf.build/docs/cli/quickstart/
+
+ZITADEL_VERSION=v4.13.1
+
+buf generate https://github.com/zitadel/zitadel.git#ref=${ZITADEL_VERSION:-main},depth=1 --include-imports --path ./proto/zitadel      # generate gRPC code (required before first build of Zitadel.Clients)
+dotnet build
+dotnet test --configuration Release
+```
+
+## Special Thanks
+
+- buehler for his efforts working on zitadel-net
+- Duende for their aesome foss identity packages
+
+
+---
 
 ##### License
 

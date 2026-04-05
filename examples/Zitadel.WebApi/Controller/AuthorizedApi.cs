@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
 
+using Duende.IdentityModel;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using Zitadel.Authentication;
 
 namespace Zitadel.WebApi.Controller;
 
@@ -31,7 +31,7 @@ public class AuthorizedApi : ControllerBase
         Timestamp = DateTime.Now,
         AuthType = User.Identity?.AuthenticationType,
         UserName = User.Identity?.Name,
-        UserId = User.FindFirstValue(OidcClaimTypes.Subject),
+        UserId = User.FindFirstValue(JwtClaimTypes.Subject),
         Claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList(),
         IsInAdminRole = User.IsInRole("Admin"),
         IsInUserRole = User.IsInRole("User"),

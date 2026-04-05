@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageTags>Zitadel;Authentication;Authorization;Middleware;oidc;OAuth2;Introspection</PackageTags>
+        <Description>
+            This package provides an easy way to protect ASP.NET Core applications and APIs with ZITADEL. 
+            It supports openidconnect for MVC applications and OAuth2 introspection for APIs.
+        </Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Duende.AspNetCore.Authentication.OAuth2Introspection" Version="7.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Zitadel.Abstractions\Zitadel.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Zitadel.AspNetCore.Tests" />
+    </ItemGroup>
+
+</Project>

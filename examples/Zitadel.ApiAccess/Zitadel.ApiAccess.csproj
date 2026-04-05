@@ -1,15 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
         <IsPackable>false</IsPackable>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Zitadel\Zitadel.csproj" />
+      <ProjectReference Include="..\..\src\Zitadel.Clients\Zitadel.Clients.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Azure.Core" Version="1.53.0" />
+      <PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.9.0" />
     </ItemGroup>
 
 </Project>

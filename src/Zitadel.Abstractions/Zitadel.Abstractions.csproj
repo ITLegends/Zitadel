@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageTags>Zitadel;Abstractions</PackageTags>
+        <Description>
+            A lightweight .NET library containing shared ZITADEL-related abstractions, constants, and helper types for 
+            building applications that integrate with ZITADEL.
+        </Description>
+    </PropertyGroup>
+
+</Project>

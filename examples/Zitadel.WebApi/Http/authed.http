@@ -1,0 +1,10 @@
+### GET authenticated user for ZITADEL_BASIC
+GET http://{{baseUrl}}/authed/basic
+Authorization: Bearer {{accessToken}}
+
+### GET authenticated user for ZITADEL_JWT
+GET http://{{baseUrl}}/authed/jwt
+Authorization: Bearer {{accessToken}}
+
+### GET authenticated user for ZITADEL_FAKE
+GET http://{{baseUrl}}/authed/mock

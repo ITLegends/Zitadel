@@ -1,0 +1,38 @@
+name: PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore
+        run: |
+          dotnet restore src/Zitadel.Abstractions/Zitadel.Abstractions.csproj
+          dotnet restore src/Zitadel.AccessTokenManagement/Zitadel.AccessTokenManagement.csproj
+          dotnet restore src/Zitadel.AspNetCore/Zitadel.AspNetCore.csproj
+          dotnet restore tests/Zitadel.AccessTokenManagement.Tests/Zitadel.AccessTokenManagement.Tests.csproj
+          dotnet restore tests/Zitadel.AspNetCore.Tests/Zitadel.AspNetCore.Tests.csproj
+
+      - name: Build
+        run: |
+          dotnet build src/Zitadel.Abstractions/Zitadel.Abstractions.csproj --no-restore -c Release
+          dotnet build src/Zitadel.AccessTokenManagement/Zitadel.AccessTokenManagement.csproj --no-restore -c Release
+          dotnet build src/Zitadel.AspNetCore/Zitadel.AspNetCore.csproj --no-restore -c Release
+
+      - name: Test
+        run: |
+          dotnet test tests/Zitadel.AccessTokenManagement.Tests/Zitadel.AccessTokenManagement.Tests.csproj --no-restore -c Release
+          dotnet test tests/Zitadel.AspNetCore.Tests/Zitadel.AspNetCore.Tests.csproj --no-restore -c Release

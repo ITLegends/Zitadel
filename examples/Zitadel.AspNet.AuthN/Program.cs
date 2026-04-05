@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 
-using Zitadel.Authentication;
-using Zitadel.Extensions;
+using Zitadel.Abstractions;
+using Zitadel.AspNetCore.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
@@ -11,8 +11,8 @@ builder.Services
     .AddZitadel(
         o =>
         {
-            o.Authority = "https://zitadel-libraries-l8boqa.zitadel.cloud/";
-            o.ClientId = "170088295403946241@library";
+            o.Authority = "https://zitadel-instance-abcdef.zitadel.cloud";
+            o.ClientId = "123456789012345678@yourproject";
             o.SignInScheme = IdentityConstants.ExternalScheme;
             o.SaveTokens = true;
         })

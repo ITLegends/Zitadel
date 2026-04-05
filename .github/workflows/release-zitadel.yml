@@ -1,0 +1,56 @@
+name: Release Zitadel
+
+on:
+  push:
+    tags:
+      - 'zitadel-v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#zitadel-v}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore
+        run: |
+          dotnet restore src/Zitadel.Abstractions/Zitadel.Abstractions.csproj
+          dotnet restore src/Zitadel.AccessTokenManagement/Zitadel.AccessTokenManagement.csproj
+          dotnet restore src/Zitadel.AspNetCore/Zitadel.AspNetCore.csproj
+          dotnet restore tests/Zitadel.AccessTokenManagement.Tests/Zitadel.AccessTokenManagement.Tests.csproj
+          dotnet restore tests/Zitadel.AspNetCore.Tests/Zitadel.AspNetCore.Tests.csproj
+
+      - name: Build
+        run: |
+          dotnet build src/Zitadel.Abstractions/Zitadel.Abstractions.csproj --no-restore -c Release
+          dotnet build src/Zitadel.AccessTokenManagement/Zitadel.AccessTokenManagement.csproj --no-restore -c Release
+          dotnet build src/Zitadel.AspNetCore/Zitadel.AspNetCore.csproj --no-restore -c Release
+
+      - name: Test
+        run: |
+          dotnet test tests/Zitadel.AccessTokenManagement.Tests/Zitadel.AccessTokenManagement.Tests.csproj --no-restore -c Release
+          dotnet test tests/Zitadel.AspNetCore.Tests/Zitadel.AspNetCore.Tests.csproj --no-restore -c Release
+
+      - name: Pack
+        run: |
+          dotnet pack src/Zitadel.Abstractions/Zitadel.Abstractions.csproj --no-build -c Release -o ./nupkgs /p:Version=${{ steps.version.outputs.VERSION }}
+          dotnet pack src/Zitadel.AccessTokenManagement/Zitadel.AccessTokenManagement.csproj --no-build -c Release -o ./nupkgs /p:Version=${{ steps.version.outputs.VERSION }}
+          dotnet pack src/Zitadel.AspNetCore/Zitadel.AspNetCore.csproj --no-build -c Release -o ./nupkgs /p:Version=${{ steps.version.outputs.VERSION }}
+
+      - name: Push to NuGet
+        run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Attach to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./nupkgs/*.nupkg
