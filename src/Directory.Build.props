@@ -7,7 +7,9 @@
         <PackageId>IT.Legends.$(MSBuildProjectName)</PackageId>
         <Authors>IT-Legends</Authors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>        
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <PropertyGroup>

@@ -53,4 +53,6 @@ jobs:
       - name: Attach to GitHub Release
         uses: softprops/action-gh-release@v3
         with:
-          files: ./nupkgs/*.nupkg
+          files: |
+            ./nupkgs/*.nupkg
+            ./nupkgs/*.snupkg
