@@ -23,8 +23,8 @@ internal sealed class ZitadelServiceAccountValidator : IValidateOptions<ZitadelS
 
     private static IEnumerable<string> CheckProperties(ZitadelServiceAccount options)
     {
-        if (string.IsNullOrEmpty(options.TokenEndpoint) && options.Pat == null) yield return "Token endpoint cannot be null or empty";
-        if (!Uri.IsWellFormedUriString(options.TokenEndpoint, UriKind.Absolute) && options.Pat == null) yield return "Please provide a well-formed token endpoint";
+        if (string.IsNullOrEmpty(options.Authority) && options.Pat == null) yield return "Authority cannot be null or empty";
+        if (!Uri.IsWellFormedUriString(options.Authority, UriKind.Absolute) && options.Pat == null) yield return "Please provide a well-formed Authority";
         if (options.Scopes.Length == 0 && options.Pat == null) yield return "Scopes cannot empty";
     }
 

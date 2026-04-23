@@ -65,7 +65,7 @@ internal sealed class ZitadelClientAssertionService : IClientAssertionService
         {
             iss = serviceAccountOptions.Jwt.UserId,
             sub = serviceAccountOptions.Jwt.UserId,
-            aud = clientCredentialsOptions.TokenEndpoint?.GetLeftPart(UriPartial.Authority),
+            aud = serviceAccountOptions.Authority,
             iat = now.ToUnixTimeSeconds(),
             exp = now.AddMinutes(5).ToUnixTimeSeconds(),
         });

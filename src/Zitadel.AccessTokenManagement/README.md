@@ -59,7 +59,7 @@ builder.Services.ConfigureZitadelServiceAccount(o =>
 ```csharp
 builder.Services.ConfigureZitadelServiceAccount(o =>
 {
-    o.TokenEndpoint = "https://<your-instance>.zitadel.cloud/oauth/v2/token";
+    o.Authority = "https://<your-instance>.zitadel.cloud";
     o.Scopes = ["openid", "urn:zitadel:iam:org:project:id:<project-id>:aud"];
     o.ClientCredentials = new ZitadelServiceAccount.ClientCredentialsProfile
     {
@@ -74,7 +74,7 @@ builder.Services.ConfigureZitadelServiceAccount(o =>
 ```csharp
 builder.Services.ConfigureZitadelServiceAccount(o =>
 {
-    o.TokenEndpoint = "https://<your-instance>.zitadel.cloud/oauth/v2/token";
+    o.Authority = "https://<your-instance>.zitadel.cloud";
     o.Scopes = ["openid", "urn:zitadel:iam:org:project:id:<project-id>:aud"];
     o.Jwt = new ZitadelServiceAccount.JwtProfile
     {
@@ -165,13 +165,14 @@ builder.Services
 
 ### `ZitadelServiceAccount`
 
-| Property            | Type                        | Description                                                  |
-|---------------------|-----------------------------|--------------------------------------------------------------|
-| `TokenEndpoint`     | `string`                    | Full URL of the token endpoint (not required when using PAT) |
-| `Scopes`            | `string[]`                  | Scopes to request. Defaults to `["openid", "profile"]`       |
-| `Pat`               | `PatProfile?`               | Personal Access Token configuration                          |
-| `ClientCredentials` | `ClientCredentialsProfile?` | Client credentials configuration                             |
-| `Jwt`               | `JwtProfile?`               | JWT Profile configuration (recommended)                      |
+| Property            | Type                        | Description                                                                    |
+|---------------------|-----------------------------|--------------------------------------------------------------------------------|
+| `Authority`         | `string`                    | Full URL of the authority that issues the tokens (not required when using PAT) |
+| `TokenPath`         | `string`                    | Path to retrieve the token relative to the authority.                          |
+| `Scopes`            | `string[]`                  | Scopes to request. Defaults to `["openid"]`                                    |
+| `Pat`               | `PatProfile?`               | Personal Access Token configuration                                            |
+| `ClientCredentials` | `ClientCredentialsProfile?` | Client credentials configuration                                               |
+| `Jwt`               | `JwtProfile?`               | JWT Profile configuration (recommended)                                        |
 
 Exactly one of `Pat`, `ClientCredentials`, or `Jwt` must be set — startup validation will fail otherwise.
 

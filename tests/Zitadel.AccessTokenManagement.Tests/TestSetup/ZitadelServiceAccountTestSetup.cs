@@ -10,6 +10,7 @@ namespace Zitadel.AccessTokenManagement.Tests.TestSetup;
 
 public static class ZitadelServiceAccountTestSetup
 {
+    public const string Authority = "https://zitadel.localhost/";
     public const string TokenEndpoint = "https://zitadel.localhost/oauth/v2/token";
     public const string DownstreamApiBase = "https://example.localhost";
     public const string DefaultDownstreamClientName = "downstream";
@@ -32,7 +33,7 @@ public static class ZitadelServiceAccountTestSetup
 
     public static readonly Action<ZitadelServiceAccount> ClientCredentialsConfiguration = o =>
     {
-        o.TokenEndpoint = TokenEndpoint;
+        o.Authority = Authority;
         o.Scopes = Scopes;
         o.ClientCredentials = new ZitadelServiceAccount.ClientCredentialsProfile
         {
@@ -42,7 +43,7 @@ public static class ZitadelServiceAccountTestSetup
     
     public static readonly Action<ZitadelServiceAccount> JwtProfileConfiguration = o =>
     {
-        o.TokenEndpoint = TokenEndpoint;
+        o.Authority = Authority;
         o.Scopes = Scopes;
         o.Jwt = new ZitadelServiceAccount.JwtProfile
         {

@@ -27,7 +27,7 @@ public static class ClientCredentialsExamples
         var services = new ServiceCollection();
         services.ConfigureZitadelServiceAccount(c =>
         {
-            c.TokenEndpoint = "https://zitadel-instance-abcdef.zitadel.cloud/oauth/v2/token";
+            c.Authority = "https://zitadel-instance-abcdef.zitadel.cloud";
             c.Scopes = [OidcScopes.OpenId, OidcScopes.Profile, ZitadelScopes.ZitadelProject];
             c.ClientCredentials = new ZitadelServiceAccount.ClientCredentialsProfile
             {

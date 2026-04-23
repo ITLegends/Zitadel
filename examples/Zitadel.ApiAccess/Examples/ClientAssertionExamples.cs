@@ -33,7 +33,7 @@ public static class ClientAssertionExamples
         var services = new ServiceCollection();
         services.ConfigureZitadelServiceAccount(c =>
         {
-            c.TokenEndpoint = "https://zitadel-instance-abcdef.zitadel.cloud/oauth/v2/token";
+            c.Authority = "https://zitadel-instance-abcdef.zitadel.cloud";
             c.Scopes = [OidcScopes.OpenId, OidcScopes.Profile, ZitadelScopes.ZitadelProject];
             c.Jwt = new ZitadelServiceAccount.JwtProfile
             {
@@ -75,7 +75,7 @@ public static class ClientAssertionExamples
         var services = new ServiceCollection();
         services.ConfigureZitadelServiceAccount(c =>
         {
-            c.TokenEndpoint = "https://zitadel-instance-abcdef.zitadel.cloud/oauth/v2/token";
+            c.Authority = "https://zitadel-instance-abcdef.zitadel.cloud";
             c.Scopes = [OidcScopes.OpenId, OidcScopes.Profile, ZitadelScopes.ZitadelProject];
             c.Jwt = new ZitadelServiceAccount.JwtProfile
             {
