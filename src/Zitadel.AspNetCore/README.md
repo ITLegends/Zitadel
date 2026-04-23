@@ -95,14 +95,14 @@ builder.Services
     .AddZitadelIntrospection(o =>
     {
         o.Authority = "https://<your-instance>.zitadel.cloud";
-        o.JwtProfile = ZitadelApplication.JwtProfile
+        o.Jwt = ZitadelApplication.JwtProfile
         {
             AppId = <appId>,
             KeyId = <KeyId>,
             // Provide either a static private key
             Key = "-----BEGIN RSA PRIVATE KEY-----\nMY SUPER SECRET KEY\n-----END RSA PRIVATE KEY-----\n"
             // Or offload the signing of the JWT to an external vault (e.g. azure key vault)
-            SignJwtAsync = (_, _, _) => async (_, data, ct) =>
+            SignJwtAsync = async (_, data, ct) =>
             {
                 var keyId = "https://my-vault.vault.azure.net/keys/zitadel-application/123456789012345678";
                 var cryptoClient = new CryptographyClient(new Uri(keyId), new AzureCliCredential());
@@ -174,7 +174,7 @@ Extends `OAuth2IntrospectionOptions` from `Duende.AspNetCore.Authentication.OAut
 | `Authority`    | `string`                         | Base URL of your ZITADEL instance                     |
 | `ClientId`     | `string`                         | Client ID for Basic Auth introspection                |
 | `ClientSecret` | `string`                         | Client secret for Basic Auth introspection            |
-| `JwtProfile`   | `ZitadelApplication.JwtProfile?` | JWT Profile credentials (recommended over Basic Auth) |
+| `Jwt`          | `ZitadelApplication.JwtProfile?` | JWT Profile credentials (recommended over Basic Auth) |
 
 ### `LocalFakeZitadelOptions`
 
