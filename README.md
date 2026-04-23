@@ -81,8 +81,8 @@ dotnet test --configuration Release
 
 ## Special Thanks
 
-- buehler for his efforts working on zitadel-net
-- Duende for their aesome foss identity packages
+- buehler for his efforts on zitadel-net.
+- Duende for their awesome foss identitymodel packages.
 
 
 ---
