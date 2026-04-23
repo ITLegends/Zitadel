@@ -171,7 +171,7 @@ public class ZitadelServiceAccountTests
     {
         // Arrange
         var services = ZitadelServiceAccountTestSetup.CreateDefaultServiceCollection();
-        services.ConfigureZitadelServiceAccount("INVALID", o => o.TokenEndpoint = ZitadelServiceAccountTestSetup.TokenEndpoint);
+        services.ConfigureZitadelServiceAccount("INVALID", o => o.Authority = ZitadelServiceAccountTestSetup.Authority);
         services.AddDownstreamHttpClient().WithZitadelServiceAccount("INVALID");
             
         var provider = services.BuildServiceProvider();
@@ -191,7 +191,7 @@ public class ZitadelServiceAccountTests
         // Arrange
         var mySettings = new Dictionary<string, string?>
         {
-            {"ServiceAccount:TokenEndpoint", ZitadelServiceAccountTestSetup.TokenEndpoint},
+            {"ServiceAccount:Authority", ZitadelServiceAccountTestSetup.Authority},
             {"ServiceAccount:ClientCredentials:ClientId", ZitadelServiceAccountTestSetup.ClientId},
             {"ServiceAccount:ClientCredentials:ClientSecret", ZitadelServiceAccountTestSetup.ClientSecret},
             {"ServiceAccount:Scope:0", ZitadelServiceAccountTestSetup.Scopes[0]},

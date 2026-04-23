@@ -26,8 +26,9 @@ internal sealed class ConfigureClientCredentialsClient : IConfigureNamedOptions<
         if (serviceAccount is { Jwt: null, Pat: null, ClientCredentials: null }) return;
 
         if (serviceAccount.Pat is not null) return;
-
-        client.TokenEndpoint = new Uri(serviceAccount.TokenEndpoint);
+        if (!Uri.TryCreate(new Uri(serviceAccount.Authority), serviceAccount.TokenPath, out var tokenEndpoint)) return;
+        
+        client.TokenEndpoint = tokenEndpoint;
         client.Scope = Scope.Parse(string.Join(" ", serviceAccount.Scopes));
 
         if (serviceAccount.ClientCredentials is not null)

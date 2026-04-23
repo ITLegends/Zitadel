@@ -9,9 +9,14 @@ namespace Zitadel.Abstractions.Credentials;
 public class ZitadelServiceAccount
 {
     /// <summary>
-    /// The token endpoint to retrieve tokens from.
+    /// The authority to retrieve the token from.
     /// </summary>
-    public string TokenEndpoint { get; set; } = string.Empty;
+    public string Authority { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The path relative to the authority to retrieve the token from.
+    /// </summary>
+    public string TokenPath { get; set; } = "/oauth/v2/token";
 
     /// <summary>
     /// The scopes that should be passed to ZITADEL on authentication.
