@@ -1,5 +1,6 @@
 using System.Net;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -182,5 +183,39 @@ public class ZitadelServiceAccountTests
         
         // Assert
         await Assert.ThrowsAsync<OptionsValidationException>(action);
+    }
+
+    [Fact]
+    public async Task LoadingServiceAccountFromConfigurationSectionIsSupported()
+    {
+        // Arrange
+        var mySettings = new Dictionary<string, string?>
+        {
+            {"ServiceAccount:TokenEndpoint", ZitadelServiceAccountTestSetup.TokenEndpoint},
+            {"ServiceAccount:ClientCredentials:ClientId", ZitadelServiceAccountTestSetup.ClientId},
+            {"ServiceAccount:ClientCredentials:ClientSecret", ZitadelServiceAccountTestSetup.ClientSecret},
+            {"ServiceAccount:Scope:0", ZitadelServiceAccountTestSetup.Scopes[0]},
+        };
+        
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(mySettings).Build();
+        var services = ZitadelServiceAccountTestSetup.CreateDefaultServiceCollection();
+        services.AddSingleton<IConfiguration>(configuration);
+        
+        services.ConfigureZitadelServiceAccount(configurationSectionPath: "ServiceAccount");
+        services.AddDownstreamHttpClient().WithZitadelServiceAccount();
+        
+        var provider = services.BuildServiceProvider();
+        var mock = provider.GetHttpMock()
+            .ExpectClientCredentialsRequest()
+            .ExpectDownstreamRequestWithToken(TokenEndpointMock.ValidAccessToken);
+        
+        var client = provider.GetHttpClient();
+
+        // Act
+        var response = await client.GetAsync("/resource");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        mock.VerifyNoOutstandingExpectation();
     }
 }

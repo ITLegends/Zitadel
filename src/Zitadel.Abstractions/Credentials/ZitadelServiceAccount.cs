@@ -16,7 +16,7 @@ public class ZitadelServiceAccount
     /// <summary>
     /// The scopes that should be passed to ZITADEL on authentication.
     /// </summary>
-    public string[] Scopes { get; set; } = ["openid", "profile"];
+    public string[] Scopes { get; set; } = ["openid"];
 
     /// <summary>
     /// Configures the service account with a Personal Access Token. The mechanism is defined here:
