@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Zitadel.Clients\Zitadel.Clients.csproj" />
+      <ProjectReference Include="..\..\src\Zitadel.AccessTokenManagement\Zitadel.AccessTokenManagement.csproj" />
     </ItemGroup>
 
     <ItemGroup>
