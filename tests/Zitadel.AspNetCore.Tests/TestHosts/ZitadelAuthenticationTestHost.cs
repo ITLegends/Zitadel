@@ -61,7 +61,7 @@ public static class ZitadelAuthenticationTestHost
             {
                 options.Authority = Authority;
                 options.ClientId = ClientId;
-                options.JwtProfile = new ZitadelApplication.JwtProfile
+                options.Jwt = new ZitadelApplication.JwtProfile
                 {
                     AppId = AppId,
                     KeyId = KeyId,

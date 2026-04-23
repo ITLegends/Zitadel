@@ -19,5 +19,5 @@ public class ZitadelIntrospectionOptions : OAuth2IntrospectionOptions
     /// the client assertion is added.
     /// </para>
     /// </summary>
-    public ZitadelApplication.JwtProfile? JwtProfile { get; set; }
+    public ZitadelApplication.JwtProfile? Jwt { get; set; }
 }

@@ -53,14 +53,14 @@ internal sealed class ConfigureZitadelIntrospectionOptions : IConfigureNamedOpti
         options.TokenRetriever = zitadelOptions.TokenRetriever;
         options.TokenTypeHint = zitadelOptions.TokenTypeHint;
 
-        if (zitadelOptions.JwtProfile is not null)
+        if (zitadelOptions.Jwt is not null)
         {
             options.ClientSecret = null;
             options.ClientCredentialStyle = ClientCredentialStyle.PostBody;
             options.Events.OnUpdateClientAssertion += context =>
                 DefaultZitadelClientAssertion.UpdateClientAssertion(
                     context,
-                    zitadelOptions.JwtProfile,
+                    zitadelOptions.Jwt,
                     context.HttpContext.RequestAborted);
         }
         else

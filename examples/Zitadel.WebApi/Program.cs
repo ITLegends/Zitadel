@@ -14,7 +14,7 @@ builder.Services
         {
             o.Authority = "https://zitadel-instance-abcdef.zitadel.cloud";
             o.ClientId = "123456789012345678@yourproject";
-            o.JwtProfile = new ZitadelApplication.JwtProfile
+            o.Jwt = new ZitadelApplication.JwtProfile
             {
                 KeyId = "123456789012345678",
                 // Optionally provide a SignJwt delegate instead to use an external vault
