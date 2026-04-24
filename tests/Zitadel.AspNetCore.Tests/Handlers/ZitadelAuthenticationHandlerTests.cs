@@ -18,12 +18,13 @@ public class ZitadelAuthenticationHandlerTests
     public async Task ShouldBeAbleToCallUnauthorizedEndpoint(IHost host)
     {
         //Arrange
+        var ct = TestContext.Current.CancellationToken;
         using var server = host;
-        await server.StartAsync();
+        await server.StartAsync(ct);
         var client = server.GetTestClient();
 
         // Act
-        var result = await client.GetFromJsonAsync<ZitadelAuthenticationTestHost.AnonymousResponse>("/unauthed");
+        var result = await client.GetFromJsonAsync<ZitadelAuthenticationTestHost.AnonymousResponse>("/unauthed", cancellationToken: ct);
 
         //Assert
         Assert.NotNull(result);
@@ -35,8 +36,9 @@ public class ZitadelAuthenticationHandlerTests
     public async Task ShouldReturnForbiddenWhenUserDoesNotHaveRole(IHost host)
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         using var server = host;
-        await server.StartAsync();
+        await server.StartAsync(ct);
         var client = server.GetTestClient();
         var request = new HttpRequestMessage(HttpMethod.Get, "/admin")
         {
@@ -48,7 +50,7 @@ public class ZitadelAuthenticationHandlerTests
         };
         
         // Act
-        var result = await client.SendAsync(request);
+        var result = await client.SendAsync(request, ct);
         
         // Assert
         Assert.Equal(HttpStatusCode.Forbidden, result.StatusCode);
@@ -59,8 +61,9 @@ public class ZitadelAuthenticationHandlerTests
     public async Task ShouldReturnAuthorizedWhenUsingValidToken(IHost host)
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         using var server = host;
-        await server.StartAsync();
+        await server.StartAsync(ct);
         var client = server.GetTestClient();
         var request = new HttpRequestMessage(HttpMethod.Get, "/authed")
         {
@@ -68,8 +71,8 @@ public class ZitadelAuthenticationHandlerTests
         };
         
         // Act
-        var response = await client.SendAsync(request);
-        var result = await response.Content.ReadFromJsonAsync<ZitadelAuthenticationTestHost.AuthenticatedResponse>();
+        var response = await client.SendAsync(request, ct);
+        var result = await response.Content.ReadFromJsonAsync<ZitadelAuthenticationTestHost.AuthenticatedResponse>(cancellationToken: ct);
         
         // Assert
         Assert.NotNull(result);
@@ -84,8 +87,9 @@ public class ZitadelAuthenticationHandlerTests
     public async Task ShouldReturnUnauthorizedWhenUsingInvalidToken(IHost host)
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         using var server = host;
-        await server.StartAsync();
+        await server.StartAsync(ct);
         var client = server.GetTestClient();
         var request = new HttpRequestMessage(HttpMethod.Get, "/authed")
         {
@@ -97,7 +101,7 @@ public class ZitadelAuthenticationHandlerTests
         };
         
         // Act
-        var response = await client.SendAsync(request);
+        var response = await client.SendAsync(request, ct);
         
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -108,8 +112,9 @@ public class ZitadelAuthenticationHandlerTests
     public async Task ShouldReturnAuthorizedWhenUserHasRole(IHost host)
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         using var server = host;
-        await server.StartAsync();
+        await server.StartAsync(ct);
         var client = server.GetTestClient();
         var request = new HttpRequestMessage(HttpMethod.Get, "/admin")
         {
@@ -117,8 +122,8 @@ public class ZitadelAuthenticationHandlerTests
         };
         
         // Act
-        var response = await client.SendAsync(request);
-        var result = await response.Content.ReadFromJsonAsync<ZitadelAuthenticationTestHost.AuthenticatedResponse>();
+        var response = await client.SendAsync(request, ct);
+        var result = await response.Content.ReadFromJsonAsync<ZitadelAuthenticationTestHost.AuthenticatedResponse>(cancellationToken: ct);
 
         // Assert
         Assert.NotNull(result);

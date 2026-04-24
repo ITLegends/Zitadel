@@ -15,6 +15,7 @@ public class ZitadelServiceAccountTests
     public async Task TokenShouldNotBeAttachedToOutgoingRequestForUnenrolledClient()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var services = ZitadelServiceAccountTestSetup.CreateDefaultServiceCollection();
         services.ConfigureZitadelServiceAccount(ZitadelServiceAccountTestSetup.PatConfiguration);
         services.AddDownstreamHttpClient();
@@ -26,7 +27,7 @@ public class ZitadelServiceAccountTests
         var client = provider.GetHttpClient();
 
         // Act
-        var response = await client.GetAsync("/resource");
+        var response = await client.GetAsync("/resource", ct);
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -37,6 +38,7 @@ public class ZitadelServiceAccountTests
     public async Task PatShouldBeAttachedToOutgoingRequest()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var services = ZitadelServiceAccountTestSetup.CreateDefaultServiceCollection();
         services.ConfigureZitadelServiceAccount(ZitadelServiceAccountTestSetup.PatConfiguration);
         services.AddDownstreamHttpClient().WithZitadelServiceAccount();
@@ -48,7 +50,7 @@ public class ZitadelServiceAccountTests
         var client = provider.GetHttpClient();
 
         // Act
-        var response = await client.GetAsync("/resource");
+        var response = await client.GetAsync("/resource", ct);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -59,6 +61,7 @@ public class ZitadelServiceAccountTests
     public async Task ClientCredentialsShouldRequestTokenAndAttachToOutgoingRequest()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var services = ZitadelServiceAccountTestSetup.CreateDefaultServiceCollection();
         services.ConfigureZitadelServiceAccount(ZitadelServiceAccountTestSetup.ClientCredentialsConfiguration);
         services.AddDownstreamHttpClient().WithZitadelServiceAccount();
@@ -71,7 +74,7 @@ public class ZitadelServiceAccountTests
         var client = provider.GetHttpClient();
 
         // Act
-        var response = await client.GetAsync("/resource");
+        var response = await client.GetAsync("/resource", ct);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -82,6 +85,7 @@ public class ZitadelServiceAccountTests
     public async Task JwtProfileShouldRequestTokenAndAttachToOutgoingRequest()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var services = ZitadelServiceAccountTestSetup.CreateDefaultServiceCollection();
         services.ConfigureZitadelServiceAccount(ZitadelServiceAccountTestSetup.JwtProfileConfiguration);
         services.AddDownstreamHttpClient().WithZitadelServiceAccount();
@@ -94,7 +98,7 @@ public class ZitadelServiceAccountTests
         var client = provider.GetHttpClient();
 
         // Act
-        var response = await client.GetAsync("/resource");
+        var response = await client.GetAsync("/resource", ct);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -105,6 +109,7 @@ public class ZitadelServiceAccountTests
     public async Task TokenShouldBeCachedForSubsequentRequests()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var services = ZitadelServiceAccountTestSetup.CreateDefaultServiceCollection();
         services.ConfigureZitadelServiceAccount(ZitadelServiceAccountTestSetup.ClientCredentialsConfiguration);
         services.AddDownstreamHttpClient().WithZitadelServiceAccount();
@@ -117,9 +122,9 @@ public class ZitadelServiceAccountTests
         var client = provider.GetHttpClient();
 
         // Act
-        var response1 = await client.GetAsync("/a");
-        var response2 = await client.GetAsync("/b");
-        var response3 = await client.GetAsync("/c");
+        var response1 = await client.GetAsync("/a", ct);
+        var response2 = await client.GetAsync("/b", ct);
+        var response3 = await client.GetAsync("/c", ct);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response1.StatusCode);
@@ -132,6 +137,7 @@ public class ZitadelServiceAccountTests
     public async Task MultipleServiceAccountsShouldBeAbleToCoExist()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var services = ZitadelServiceAccountTestSetup.CreateDefaultServiceCollection();
         services.ConfigureZitadelServiceAccount("JWT", ZitadelServiceAccountTestSetup.JwtProfileConfiguration);
         services.ConfigureZitadelServiceAccount("BASIC", ZitadelServiceAccountTestSetup.ClientCredentialsConfiguration);
@@ -155,9 +161,9 @@ public class ZitadelServiceAccountTests
         var patClient = provider.GetHttpClient("C");
 
         // Act
-        var jwtResponse = await jwtClient.GetAsync("/resource");
-        var basicResponse = await basicClient.GetAsync("/resource");
-        var patResponse = await patClient.GetAsync("/resource");
+        var jwtResponse = await jwtClient.GetAsync("/resource", ct);
+        var basicResponse = await basicClient.GetAsync("/resource", ct);
+        var patResponse = await patClient.GetAsync("/resource", ct);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, jwtResponse.StatusCode);
@@ -170,6 +176,7 @@ public class ZitadelServiceAccountTests
     public async Task InvalidServiceAccountSetupThrowsValidationException()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var services = ZitadelServiceAccountTestSetup.CreateDefaultServiceCollection();
         services.ConfigureZitadelServiceAccount("INVALID", o => o.Authority = ZitadelServiceAccountTestSetup.Authority);
         services.AddDownstreamHttpClient().WithZitadelServiceAccount("INVALID");
@@ -179,7 +186,7 @@ public class ZitadelServiceAccountTests
         var client = provider.GetHttpClient();
 
         // Act
-        var action = () => client.GetAsync("/resource");
+        var action = () => client.GetAsync("/resource", ct);
         
         // Assert
         await Assert.ThrowsAsync<OptionsValidationException>(action);
@@ -189,6 +196,7 @@ public class ZitadelServiceAccountTests
     public async Task LoadingServiceAccountFromConfigurationSectionIsSupported()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var mySettings = new Dictionary<string, string?>
         {
             {"ServiceAccount:Authority", ZitadelServiceAccountTestSetup.Authority},
@@ -212,7 +220,7 @@ public class ZitadelServiceAccountTests
         var client = provider.GetHttpClient();
 
         // Act
-        var response = await client.GetAsync("/resource");
+        var response = await client.GetAsync("/resource", ct);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
