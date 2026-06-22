@@ -9,10 +9,12 @@ namespace Zitadel.AccessTokenManagement.Options;
 internal sealed class ConfigureClientCredentialsClient : IConfigureNamedOptions<ClientCredentialsClient>
 {
     private readonly IOptionsMonitor<ZitadelServiceAccount> _serviceAccountOptions;
+    private readonly ZitadelServiceAccountRegistry _serviceAccountRegistry;
 
-    public ConfigureClientCredentialsClient(IOptionsMonitor<ZitadelServiceAccount> serviceAccountOptions)
+    public ConfigureClientCredentialsClient(IOptionsMonitor<ZitadelServiceAccount> serviceAccountOptions, IOptions<ZitadelServiceAccountRegistry> serviceAccountRegistry)
     {
         _serviceAccountOptions = serviceAccountOptions;
+        this._serviceAccountRegistry = serviceAccountRegistry.Value;
     }
 
     public void Configure(ClientCredentialsClient client)
@@ -22,8 +24,8 @@ internal sealed class ConfigureClientCredentialsClient : IConfigureNamedOptions<
 
     public void Configure(string? name, ClientCredentialsClient client)
     {
+        if(!_serviceAccountRegistry.IsServiceAccountRegistered(name ?? string.Empty)) return;
         var serviceAccount = _serviceAccountOptions.Get(name ?? string.Empty);
-        if (serviceAccount is { Jwt: null, Pat: null, ClientCredentials: null }) return;
 
         if (serviceAccount.Pat is not null) return;
         if (!Uri.TryCreate(new Uri(serviceAccount.Authority), serviceAccount.TokenPath, out var tokenEndpoint)) return;

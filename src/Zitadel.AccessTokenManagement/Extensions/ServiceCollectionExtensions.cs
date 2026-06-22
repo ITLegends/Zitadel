@@ -106,6 +106,7 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddSharedServices(this IServiceCollection services, string serviceAccountName)
     {
+        services.Configure<ZitadelServiceAccountRegistry>(registry => registry.RegisterServiceAccount(serviceAccountName));
         services.TryAddSingleton<IValidateOptions<ZitadelServiceAccount>, ZitadelServiceAccountValidator>();
         services.TryAddSingleton<IClientAssertionService, ZitadelClientAssertionService>();
         services.TryAddSingleton<ZitadelClientAssertionMessageHandler>();
