@@ -14,7 +14,7 @@ internal sealed class ConfigureClientCredentialsClient : IConfigureNamedOptions<
     public ConfigureClientCredentialsClient(IOptionsMonitor<ZitadelServiceAccount> serviceAccountOptions, IOptions<ZitadelServiceAccountRegistry> serviceAccountRegistry)
     {
         _serviceAccountOptions = serviceAccountOptions;
-        this._serviceAccountRegistry = serviceAccountRegistry.Value;
+        _serviceAccountRegistry = serviceAccountRegistry.Value;
     }
 
     public void Configure(ClientCredentialsClient client)

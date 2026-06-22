@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 using Zitadel.Abstractions.Credentials;
+using Zitadel.AccessTokenManagement.Options;
 
 namespace Zitadel.AccessTokenManagement.ClientAssertion;
 
@@ -32,15 +33,18 @@ internal sealed class ZitadelClientAssertionService : IClientAssertionService
 {
     private readonly IOptionsMonitor<ClientCredentialsClient> _options;
     private readonly IOptionsMonitor<ZitadelServiceAccount> _saOptions;
+    private readonly ZitadelServiceAccountRegistry _saRegistry;
     private readonly IServiceProvider _serviceProvider;
 
     public ZitadelClientAssertionService(
         IOptionsMonitor<ClientCredentialsClient> options,
         IOptionsMonitor<ZitadelServiceAccount> saOptions,
+        IOptions<ZitadelServiceAccountRegistry> saRegistry,
         IServiceProvider serviceProvider)
     {
         _options = options;
         _saOptions = saOptions;
+        _saRegistry = saRegistry.Value;
         _serviceProvider = serviceProvider;
     }
 
@@ -49,6 +53,8 @@ internal sealed class ZitadelClientAssertionService : IClientAssertionService
         TokenRequestParameters? parameters = null,
         CancellationToken ct = default)
     {
+        if(!_saRegistry.IsServiceAccountRegistered(clientName ?? string.Empty)) return null;
+        
         var clientCredentialsOptions = _options.Get(clientName);
         var serviceAccountOptions = _saOptions.Get(clientName);
         if (!clientCredentialsOptions.ClientId.HasValue || (serviceAccountOptions.Jwt == null)) return null;
