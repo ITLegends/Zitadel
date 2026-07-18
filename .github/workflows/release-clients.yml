@@ -18,7 +18,7 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF_NAME#client-v}" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.x'
 
