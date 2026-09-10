@@ -109,7 +109,7 @@ public static class ServiceCollectionExtensions
         services.Configure<ZitadelServiceAccountRegistry>(registry => registry.RegisterServiceAccount(serviceAccountName));
         services.TryAddSingleton<IValidateOptions<ZitadelServiceAccount>, ZitadelServiceAccountValidator>();
         services.TryAddSingleton<IClientAssertionService, ZitadelClientAssertionService>();
-        services.TryAddSingleton<ZitadelClientAssertionMessageHandler>();
+        services.TryAddTransient<ZitadelClientAssertionMessageHandler>();
         services.ConfigureOptions<ConfigureClientCredentialsClient>();
         services.AddClientCredentialsTokenManagement();
 
