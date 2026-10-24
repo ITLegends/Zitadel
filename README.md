@@ -72,7 +72,7 @@ The [`examples`](./examples) folder contains working samples:
 ```bash
 # install buf first https://buf.build/docs/cli/quickstart/
 
-ZITADEL_VERSION=v4.13.1
+ZITADEL_VERSION=v4.20.0
 
 buf generate https://github.com/zitadel/zitadel.git#ref=${ZITADEL_VERSION:-main},depth=1 --include-imports --path ./proto/zitadel      # generate gRPC code (required before first build of Zitadel.Clients)
 dotnet build
