@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageTags>Zitadel;Authentication;Authorization;Middleware;oidc;OAuth2;Introspection</PackageTags>
@@ -13,11 +12,18 @@
 
     <ItemGroup>
         <PackageReference Include="Duende.AspNetCore.Authentication.OAuth2Introspection" Version="7.0.2" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.15" />
     </ItemGroup>
 
+    <ItemGroup Condition="'$(TargetFramework)' == 'net11.0'">
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="11.0.0" />
+    </ItemGroup>
+
     <ItemGroup>
-      <ProjectReference Include="..\Zitadel.Abstractions\Zitadel.Abstractions.csproj" />
+        <ProjectReference Include="..\Zitadel.Abstractions\Zitadel.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
